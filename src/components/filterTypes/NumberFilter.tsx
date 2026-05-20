@@ -1,6 +1,6 @@
 import { useState, ChangeEvent } from "react";
 import FilterCard from "./FilterCard";
-import { addQueryParam } from "@/content/content";
+import { addQueryParam, removeQueryParam } from "@/content/queryEdit";
 
 interface FilterProps {
   name: string;
@@ -25,12 +25,16 @@ export default function NumberFilter({
   const onSave = () => {
     setSavedValue(tempValue);
     addQueryParam(getQueryParam(), name);
+    return true;
   };
   const onCancel = () => {
     setTempValue(savedValue);
   };
   const onChange = (event: ChangeEvent<HTMLInputElement>, maxMin: string) => {
     setTempValue((prev) => ({ ...prev, [maxMin]: Number(event.target.value) }));
+  };
+  const onRemove = () => {
+    removeQueryParam(name);
   };
   const getQueryParam = () => {
     // using temp value since saved value might not be updated yet
@@ -43,18 +47,26 @@ export default function NumberFilter({
 
   return (
     <FilterCard
+      name={name}
       title={label}
       onSave={onSave}
       onCancel={onCancel}
+      onRemove={onRemove}
       savedView={() => (
         <div>
           {numberType === "range" ? (
             <div>
-              <div className="filter-input">{savedValue.min}</div>{" "}
-              <div className="filter-input">{savedValue.max}</div>
+              <div className="filter-input filter-saved num-filter">
+                {savedValue.min}
+              </div>{" "}
+              <div className="filter-input filter-saved num-filter">
+                {savedValue.max}
+              </div>
             </div>
           ) : (
-            <div className="filter-input">{savedValue.min}</div>
+            <div className="filter-input filter-saved num-filter">
+              {savedValue.min}
+            </div>
           )}
         </div>
       )}
@@ -68,13 +80,13 @@ export default function NumberFilter({
             {numberType === "range" ? (
               <div>
                 <input
-                  className="filter-input"
+                  className="filter-input num-filter"
                   type="number"
                   value={tempValue.min}
                   onChange={(e) => onChange(e, "min")}
                 ></input>
                 <input
-                  className="filter-input"
+                  className="filter-input num-filter"
                   type="number"
                   value={tempValue.max}
                   onChange={(e) => onChange(e, "max")}
@@ -82,7 +94,7 @@ export default function NumberFilter({
               </div>
             ) : (
               <input
-                className="filter-input"
+                className="filter-input num-filter"
                 type="number"
                 value={tempValue.min}
                 onChange={(e) => onChange(e, "min")}

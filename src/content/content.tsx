@@ -22,9 +22,6 @@ const observer = new MutationObserver(() => {
 
     const defaultMenu = menuContainer.firstElementChild as HTMLElement;
     defaultMenu.style.borderRadius = "0 10px 10px 0";
-    // defaultMenu.style.position = "relative";
-    // defaultMenu.style.right = "auto";
-    // defaultMenu.style.transform = "translateX(-100%)";
 
     const injectedMenu = document.createElement("div");
     injectedMenu.id = "osu-extra-filters-menu";
@@ -47,27 +44,13 @@ const observer = new MutationObserver(() => {
 });
 
 console.log("Osu! extension test");
-const searchInput = document.querySelector(
-  "input.beatmapsets-search__input",
-) as HTMLInputElement;
-console.log("Test: ", searchInput);
 
 observer.observe(document.body, { childList: true, subtree: true });
 
-export function addQueryParam(param: string, filterName: string) {
-  const url = new URL(window.location.href);
-  const query = url.searchParams.get("q") ?? "";
-  let editedQuery = query.split(" ").filter((i) => !i.startsWith(filterName));
-  editedQuery.push(`${param}`);
-  const newQuery = editedQuery.join(" ");
-
-  // console.log("Old: ", query);
-  // console.log("New: ", newQuery);
-
-  // url.searchParams.set("q", newQuery.toString());
-  // const searchInput = document.querySelector(
-  //   "input.beatmapsets-search__input",
-  // ) as HTMLInputElement;
+export function sendNewQuery(newQuery: string) {
+  const searchInput = document.querySelector(
+    "input.beatmapsets-search__input",
+  ) as HTMLInputElement;
 
   if (searchInput) {
     const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
@@ -80,8 +63,4 @@ export function addQueryParam(param: string, filterName: string) {
     }
     searchInput.dispatchEvent(new Event("input", { bubbles: true }));
   }
-}
-
-export function removeQueryParam(filterName: string) {
-  return filterName;
 }

@@ -43,6 +43,15 @@
 
 .filter-input {
   background-color: rgb(134, 142, 146);
-  width: 50px;
+
   text-align: center;
+}
+.num-filter {
+  width: 50px;
+}
+.string-filter {
+  width: 250px;
+}
+.filter-saved {
+  user-select: none;
 }
