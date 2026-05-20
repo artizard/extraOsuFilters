@@ -1,6 +1,6 @@
 interface FilterProps {
-  name: String;
-  label: String;
+  name: string;
+  label: string;
 }
 
 export default function DateFilter({ name, label }: FilterProps) {

@@ -1,0 +1,48 @@
+.filter-card {
+  display: flex;
+  gap: 5px;
+}
+
+.edit-btn,
+.save-btn,
+.cancel-btn,
+.add-btn {
+  border: none;
+  border-radius: 3px;
+}
+.edit-btn {
+  background-color: rgb(89, 102, 108);
+}
+.add-btn {
+  background-color: rgb(89, 102, 108);
+}
+
+.save-btn {
+  background-color: rgb(89, 102, 108);
+}
+.cancel-btn {
+  background-color: rgb(217, 108, 108);
+}
+
+.num-type-btn {
+  border: none;
+  border-radius: 3px;
+  background-color: rgb(89, 102, 108);
+
+  &:hover {
+    background-color: rgb(125, 138, 143);
+  }
+}
+.selected-num-type {
+  background-color: rgb(154, 177, 188);
+
+  &:hover {
+    background-color: rgb(177, 196, 204);
+  }
+}
+
+.filter-input {
+  background-color: rgb(134, 142, 146);
+  width: 50px;
+  text-align: center;
+}

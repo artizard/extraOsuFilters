@@ -53,6 +53,7 @@ export default function FilterMenu({ defaultMenu }: MenuProps) {
       <div className="tab-container">
         {tabs.map((tab) => (
           <button
+            key={tab.id}
             className={`tab-btn ${currTab == tab.id ? "selected-tab" : ""}`}
             onClick={() => setCurrTab(tab.id)}
           >

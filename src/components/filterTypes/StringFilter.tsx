@@ -1,6 +1,6 @@
 interface FilterProps {
-  name: String;
-  label: String;
+  name: string;
+  label: string;
 }
 export default function StringFilter({ name, label }: FilterProps) {
   return <div>{label}</div>;
