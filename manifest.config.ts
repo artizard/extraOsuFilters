@@ -13,7 +13,7 @@ export default defineManifest({
   content_scripts: [
     {
       js: ["src/content/content.tsx"],
-      matches: ["https://osu.ppy.sh/beatmapsets*"],
+      matches: ["https://osu.ppy.sh/*"],
     },
   ],
 });

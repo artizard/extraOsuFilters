@@ -6,7 +6,6 @@ function getQueryArr(): string[] {
   const searchBar = document.querySelector(
     "input.beatmapsets-search__input",
   ) as HTMLInputElement;
-  console.log(searchBar);
 
   if (searchBar) {
     query = searchBar.value;

@@ -5,6 +5,20 @@ let isInjected = false;
 let reactRoot: Root | null = null;
 
 const observer = new MutationObserver(() => {
+  // if it's the wrong page and we have already injected, then we need to unmount
+  // I don't think this will ever actually happen since clicking off of the menu closes
+  // it, and it will be cleaned up normally, but I thought I would put this here to be safe.
+  if (!window.location.pathname.startsWith("/beatmapsets")) {
+    if (isInjected) {
+      if (reactRoot) {
+        reactRoot.unmount();
+        reactRoot = null;
+      }
+      isInjected = false;
+    }
+    return;
+  }
+
   const portalDiv = document.querySelector(
     "div.js-portal:has(.user-tag-picker)",
   );
@@ -35,17 +49,15 @@ const observer = new MutationObserver(() => {
     if (reactRoot) {
       reactRoot.unmount();
       reactRoot = null;
-    } else {
-      console.log("LEAK");
+      console.log("NORMAL CLEANUP");
+      isInjected = false;
     }
-
-    isInjected = false;
   }
 });
 
 console.log("Osu! extension test");
 
-observer.observe(document.body, { childList: true, subtree: true });
+observer.observe(document.documentElement, { childList: true, subtree: true });
 
 export function sendNewQuery(newQuery: string) {
   const searchInput = document.querySelector(
