@@ -52,9 +52,17 @@ const observer = new MutationObserver(() => {
       isInjected = false;
     }
   }
-});
 
-console.log("Osu! extension test");
+  console.log("Osu! extension test");
+
+  // change tag icon and text to filter
+  const tagButton = document.querySelector(
+    "button.beatmapsets-search__icon",
+  ) as HTMLElement;
+  const tagIcon = tagButton.firstElementChild;
+  tagButton.title = "Additional Filters";
+  if (tagIcon) tagIcon.className = "fas fa-filter";
+});
 
 observer.observe(document.documentElement, { childList: true, subtree: true });
 

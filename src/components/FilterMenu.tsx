@@ -10,7 +10,7 @@ interface MenuProps {
 }
 
 export default function FilterMenu({ defaultMenu }: MenuProps) {
-  const [currTab, setCurrTab] = useState("tags");
+  const [currTab, setCurrTab] = useState("mapInfo");
 
   const tabs = [
     { id: "mapInfo", label: "Map Info" },
