@@ -2,8 +2,20 @@ import { sendNewQuery } from "./content";
 
 // Returns the query parameters as a string array
 function getQueryArr(): string[] {
-  const url = new URL(window.location.href);
-  const query = url.searchParams.get("q") ?? "";
+  let query;
+  const searchBar = document.querySelector(
+    "input.beatmapsets-search__input",
+  ) as HTMLInputElement;
+  console.log(searchBar);
+
+  if (searchBar) {
+    query = searchBar.value;
+    // backup since i was having some issues earlier finding the search bar from this file
+  } else {
+    console.log("FALLBACK");
+    const url = new URL(window.location.href);
+    query = url.searchParams.get("q") ?? "";
+  }
   return sanitizeParams(query.split(" "));
 }
 
@@ -23,12 +35,6 @@ export function removeQueryParam(filterName: string) {
   const newQuery = editedQuery.join(" ");
   sendNewQuery(newQuery);
 }
-
-// // checks if the given filter is set or not
-// export function isFilterSet(filter: string) {
-//   const query = getQueryArr();
-//   return query.some((element) => element.startsWith(filter));
-// }
 
 // some filters have multiple keywords that can be used - star vs stars, created vs submitted, etc.
 // we have to convert them all to one standard, otherwise we will not delete the right ones
@@ -86,7 +92,7 @@ export function getFilterParam(
       return undefined;
     } else {
       return {
-        rangeType: parsedParams[0].operator,
+        rangeType: parsedParams[0].operator as OsuOperator,
         value: parsedParams[0].value,
       };
     }
@@ -101,7 +107,7 @@ export function getFilterParam(
   // one param
   if (parsedParams.length === 1) {
     return {
-      rangeType: parsedParams[0].operator,
+      rangeType: parsedParams[0].operator as OsuOperator,
       value: parsedParams[0].value,
     };
   }
