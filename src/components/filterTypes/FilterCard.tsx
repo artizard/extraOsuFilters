@@ -3,8 +3,8 @@ import "./FilterCard.css";
 import { isFilterSet } from "@/content/queryEdit";
 
 interface CardProps {
-  name: string;
   title: string;
+  isSet: boolean;
   savedView: () => React.ReactNode;
   editView: () => React.ReactNode;
   onSave: () => boolean;
@@ -13,8 +13,8 @@ interface CardProps {
 }
 
 export default function FilterCard({
-  name,
   title = "Filter Name",
+  isSet,
   savedView,
   editView,
   onSave,
@@ -22,18 +22,10 @@ export default function FilterCard({
   onRemove,
 }: CardProps) {
   const [isEditing, setIsEditing] = useState(false);
-  const [isSet, setIsSet] = useState(false);
-
-  useEffect(() => {
-    if (isFilterSet(name)) {
-      setIsSet(true);
-    }
-  }, []);
 
   const handleSave = () => {
     if (onSave()) {
       setIsEditing(false);
-      if (!isSet) setIsSet(true);
     }
   };
   const handleCancel = () => {
@@ -42,8 +34,6 @@ export default function FilterCard({
   };
   const handleRemove = () => {
     onRemove();
-    console.log("TEST");
-    setIsSet(false);
   };
 
   return (

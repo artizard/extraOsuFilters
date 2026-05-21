@@ -52,6 +52,9 @@
 .string-filter {
   width: 250px;
 }
+.date-filter {
+  width: 150px;
+}
 .filter-saved {
   user-select: none;
 }

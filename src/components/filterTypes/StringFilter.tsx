@@ -1,6 +1,10 @@
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import FilterCard from "./FilterCard";
-import { addQueryParam, removeQueryParam } from "@/content/queryEdit";
+import {
+  addQueryParam,
+  getFilterParam,
+  removeQueryParam,
+} from "@/content/queryEdit";
 
 interface FilterProps {
   name: string;
@@ -9,10 +13,21 @@ interface FilterProps {
 export default function StringFilter({ name, label }: FilterProps) {
   const [savedValue, setSavedValue] = useState("");
   const [tempValue, setTempValue] = useState("");
+  const [isSet, setIsSet] = useState(false);
+
+  useEffect(() => {
+    const currVal = getFilterParam(name, false);
+    if (currVal) {
+      setSavedValue(currVal.value as string);
+      setTempValue(currVal.value as string);
+      setIsSet(true);
+    }
+  }, []);
 
   const onSave = () => {
     if (tempValue.trim()) {
       setSavedValue(tempValue);
+      setIsSet(true);
       addQueryParam(getQueryParam(), name);
       return true;
     } else {
@@ -27,6 +42,7 @@ export default function StringFilter({ name, label }: FilterProps) {
   };
   const onRemove = () => {
     removeQueryParam(name);
+    setIsSet(false);
   };
   const getQueryParam = () => {
     // using temp value since saved value might not be updated yet
@@ -35,8 +51,8 @@ export default function StringFilter({ name, label }: FilterProps) {
   return (
     <div>
       <FilterCard
-        name={name}
         title={label}
+        isSet={isSet}
         onSave={onSave}
         onCancel={onCancel}
         onRemove={onRemove}

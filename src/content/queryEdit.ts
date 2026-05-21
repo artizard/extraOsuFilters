@@ -24,12 +24,11 @@ export function removeQueryParam(filterName: string) {
   sendNewQuery(newQuery);
 }
 
-// checks if the given filter is set or not
-export function isFilterSet(filter: string) {
-  const query = getQueryArr();
-  console.log(query);
-  return query.some((element) => element.startsWith(filter));
-}
+// // checks if the given filter is set or not
+// export function isFilterSet(filter: string) {
+//   const query = getQueryArr();
+//   return query.some((element) => element.startsWith(filter));
+// }
 
 // some filters have multiple keywords that can be used - star vs stars, created vs submitted, etc.
 // we have to convert them all to one standard, otherwise we will not delete the right ones
@@ -47,4 +46,82 @@ function sanitizeParams(arr: string[]): string[] {
       return element;
     }
   });
+}
+
+type RangeResult = { rangeType: "range"; value: { min: string; max: string } };
+type OsuOperator = "=" | "<" | "<=" | ">" | ">=";
+type SingleResult = { rangeType: OsuOperator; value: string };
+interface ParsedParam {
+  filter: string;
+  operator: string;
+  value: string;
+}
+function parseQueryParam(param: string): ParsedParam | null {
+  const parts = param.split(/([<>]=?|=)/);
+  if (parts.length < 3) return null;
+  return { filter: parts[0], operator: parts[1], value: parts[2] };
+}
+
+export function getFilterParam(
+  filter: string,
+  canBeRange: boolean,
+): RangeResult | SingleResult | undefined {
+  const query = getQueryArr();
+  const rawParams = query.filter((element) => element.startsWith(filter));
+
+  // parse each parameter
+  const parsedParams = rawParams
+    .map(parseQueryParam)
+    .filter((elem) => elem !== null);
+
+  // no valid filters of type filter
+  if (parsedParams.length === 0) {
+    return undefined;
+  }
+
+  // single parameter mode
+  if (!canBeRange) {
+    if (parsedParams.length > 1) {
+      console.error("Extra duplicate filters, ERROR");
+      return undefined;
+    } else {
+      return {
+        rangeType: parsedParams[0].operator,
+        value: parsedParams[0].value,
+      };
+    }
+  }
+  if (parsedParams.length > 2) {
+    console.error("More than two duplicate filters, ERROR");
+    return undefined;
+  }
+
+  // range parameter mode
+
+  // one param
+  if (parsedParams.length === 1) {
+    return {
+      rangeType: parsedParams[0].operator,
+      value: parsedParams[0].value,
+    };
+  }
+
+  // range param
+  const param1 = parsedParams[0];
+  const param2 = parsedParams[1];
+
+  if (param1.operator === ">" && param2.operator === "<") {
+    return {
+      rangeType: "range",
+      value: { min: param1.value, max: param2.value },
+    };
+  } else if (param1.operator === "<" && param2.operator === ">") {
+    return {
+      rangeType: "range",
+      value: { min: param2.value, max: param1.value },
+    };
+  } else {
+    console.error("Invalid range, something went wrong with the filters");
+    return undefined;
+  }
 }
