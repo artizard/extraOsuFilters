@@ -49,7 +49,6 @@ const observer = new MutationObserver(() => {
     if (reactRoot) {
       reactRoot.unmount();
       reactRoot = null;
-      console.log("NORMAL CLEANUP");
       isInjected = false;
     }
   }

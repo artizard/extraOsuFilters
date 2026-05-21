@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./FilterCard.css";
-import { isFilterSet } from "@/content/queryEdit";
 
 interface CardProps {
   title: string;

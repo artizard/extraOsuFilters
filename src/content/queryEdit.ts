@@ -15,7 +15,9 @@ function getQueryArr(): string[] {
     const url = new URL(window.location.href);
     query = url.searchParams.get("q") ?? "";
   }
-  return sanitizeParams(query.split(" "));
+  return sanitizeParams(
+    query.match(/[^\s"]+(?:([<>]=?)|=)(?:[^\s"]+|"[^"]*")/g) || [],
+  );
 }
 
 // adds the given filter
@@ -53,26 +55,38 @@ function sanitizeParams(arr: string[]): string[] {
   });
 }
 
-type RangeResult = { rangeType: "range"; value: { min: string; max: string } };
+type RangeResult = {
+  rangeType: "range";
+  value: { min: string; max: string };
+};
 type OsuOperator = "=" | "<" | "<=" | ">" | ">=";
-type SingleResult = { rangeType: OsuOperator; value: string };
+type StringResult = { rangeType: OsuOperator; value: string };
 interface ParsedParam {
   filter: string;
   operator: string;
   value: string;
 }
 function parseQueryParam(param: string): ParsedParam | null {
+  console.log("PARAM: ", param);
   const parts = param.split(/([<>]=?|=)/);
   if (parts.length < 3) return null;
-  return { filter: parts[0], operator: parts[1], value: parts[2] };
+  console.log("PARTS: ", parts);
+  // I had to make sure to join any extra elements, otherwise you would miss part of strings if there were equal signs, etc.
+  return { filter: parts[0], operator: parts[1], value: parts.slice(2).join() };
 }
 
 export function getFilterParam(
   filter: string,
-  canBeRange: boolean,
-): RangeResult | SingleResult | undefined {
+  filterType: string,
+): RangeResult | StringResult | undefined {
   const query = getQueryArr();
-  const rawParams = query.filter((element) => element.startsWith(filter));
+  console.log("QUERY: ", query);
+  const rawParams = query.filter((element) => {
+    // it wasn't enough to just do .startsWith() because there are some overlapping filters like "ar" and "artist", plus the
+    // user could input non-existent filters that would match with a real one
+    if (!element.startsWith(filter)) return false;
+    return ["=", "<", "<=", ">", ">="].includes(element.charAt(filter.length));
+  });
 
   // parse each parameter
   const parsedParams = rawParams
@@ -84,20 +98,28 @@ export function getFilterParam(
     return undefined;
   }
 
-  // single parameter mode
-  if (!canBeRange) {
+  // strings cannot be range
+  if (filterType === "string") {
     if (parsedParams.length > 1) {
       console.error("Extra duplicate filters, ERROR");
       return undefined;
     } else {
+      let strippedVal = parsedParams[0].value;
+      // strip quotation marks if present
+      if (strippedVal.startsWith('"') && strippedVal.endsWith('"')) {
+        strippedVal = strippedVal.slice(1, -1);
+      }
+
       return {
         rangeType: parsedParams[0].operator as OsuOperator,
-        value: parsedParams[0].value,
+        value: strippedVal,
       };
     }
   }
   if (parsedParams.length > 2) {
-    console.error("More than two duplicate filters, ERROR");
+    console.warn(
+      "This extension can only handle single filters with </>/>=/<=/= or range values.",
+    );
     return undefined;
   }
 
@@ -112,21 +134,59 @@ export function getFilterParam(
   }
 
   // range param
-  const param1 = parsedParams[0];
-  const param2 = parsedParams[1];
+  let param1 = parsedParams[0];
+  let param2 = parsedParams[1];
 
-  if (param1.operator === ">" && param2.operator === "<") {
+  // I ran into the issue when developing where I treat a range value as x <= # and y >= #, however the user can
+  // go into the search bar and change that to any combination of </<=/>/>=. To handle parsing this without losing
+  // the user's data, I turn any </> to a <=/>= and adjust the value accordingly to retain the same meaning. This
+  // will lead to weird cases where the user will suddenly have a value like 5.01 when they manually inputted 5.
+  // This isn't ideal, but for the sake of simplicity I went with this. I thought about allowing the user to manually
+  // pick whether the values in the range were inclusive or not, but I couldn't for the life of me figure out an intuitive
+  // way to lay ou the ui for that, so I opted for this simpler approach.
+
+  // sanitize operators
+  for (const param of [param1, param2]) {
+    if (param.operator === ">") {
+      if (filterType === "number") {
+        param.value = String(Number(param.value) + 0.01);
+      } else if (filterType === "date") {
+        param.value = incrementDate(param.value, 1);
+      }
+      param.operator = ">=";
+    } else if (param.operator === "<") {
+      if (filterType === "number") {
+        param.value = String(Number(param.value) - 0.01);
+      } else if (filterType === "date") {
+        param.value = incrementDate(param.value, -1);
+      }
+      param.operator = "<=";
+    }
+  }
+
+  if (param1.operator === ">=" && param2.operator === "<=") {
     return {
       rangeType: "range",
       value: { min: param1.value, max: param2.value },
     };
-  } else if (param1.operator === "<" && param2.operator === ">") {
+  } else if (param1.operator === "<=" && param2.operator === ">=") {
     return {
       rangeType: "range",
       value: { min: param2.value, max: param1.value },
     };
   } else {
-    console.error("Invalid range, something went wrong with the filters");
+    // some illegal combination of operators
+    console.warn(
+      "This extension can only handle single filters with </>/>=/<=/= or range values.",
+    );
     return undefined;
   }
+}
+
+// adds incrementBy days to an html date string and returns it as such
+function incrementDate(dateString: string, incrementBy: number) {
+  // there very well might be a bug with the timezones but I tried to fix it
+  const date = new Date(dateString + "T00:00:00Z");
+  date.setUTCDate(date.getUTCDate() + incrementBy);
+  return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, "0")}-${String(date.getUTCDate()).padStart(2, "0")}`;
 }

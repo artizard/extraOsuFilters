@@ -5,50 +5,47 @@ export default function RangeTypeSelect({
   rangeType: string;
   onSelect: (choice: string) => void;
 }) {
-  const handleChange = (btnClicked: string) => {
-    let newType = btnClicked;
-    switch (btnClicked) {
-      case "<":
-        newType = rangeType === "<" ? "<=" : "<";
-        break;
-      case "<=":
-        newType = "<";
-        break;
-      case ">":
-        newType = rangeType === ">" ? ">=" : ">";
-        break;
-      case ">=":
-        newType = ">";
-        break;
-      default:
-        break;
-    }
-    onSelect(newType);
-  };
-
   return (
     <div>
       <button
         className={`num-type-btn ${rangeType === "=" ? "selected-num-type" : ""}`}
-        onClick={() => handleChange("=")}
+        title="Equal to"
+        onClick={() => onSelect("=")}
       >
         =
       </button>
       <button
-        className={`num-type-btn ${rangeType === "<" || rangeType === "<=" ? "selected-num-type" : ""}`}
-        onClick={() => handleChange("<")}
+        className={`num-type-btn ${rangeType === "<" ? "selected-num-type" : ""}`}
+        title="Less than"
+        onClick={() => onSelect("<")}
       >
-        {rangeType == "<=" ? "<=" : "<"}
+        {"<"}
       </button>
       <button
-        className={`num-type-btn ${rangeType === ">" || rangeType === ">=" ? "selected-num-type" : ""}`}
-        onClick={() => handleChange(">")}
+        className={`num-type-btn ${rangeType === ">" ? "selected-num-type" : ""}`}
+        title="Greater than"
+        onClick={() => onSelect(">")}
       >
-        {rangeType === ">=" ? ">=" : ">"}
+        {">"}
+      </button>
+      <button
+        className={`num-type-btn ${rangeType === "<=" ? "selected-num-type" : ""}`}
+        title="Less than or equal to"
+        onClick={() => onSelect("<=")}
+      >
+        &le;
+      </button>
+      <button
+        className={`num-type-btn ${rangeType === ">=" ? "selected-num-type" : ""}`}
+        title="Greater than or equal to"
+        onClick={() => onSelect(">=")}
+      >
+        &ge;
       </button>
       <button
         className={`num-type-btn ${rangeType === "range" ? "selected-num-type" : ""}`}
-        onClick={() => handleChange("range")}
+        title="Range of values (inclusive)"
+        onClick={() => onSelect("range")}
       >
         range
       </button>

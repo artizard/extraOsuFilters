@@ -25,7 +25,7 @@ export default function NumberFilter({ name, label }: FilterProps) {
   const [isSet, setIsSet] = useState(false);
 
   useEffect(() => {
-    const currVal = getFilterParam(name, true);
+    const currVal = getFilterParam(name, "number");
     if (currVal) {
       setRangeType(currVal.rangeType);
       let newVal;
@@ -93,7 +93,7 @@ export default function NumberFilter({ name, label }: FilterProps) {
   const getQueryParam = () => {
     // using temp value since saved value might not be updated yet
     if (rangeType == "range") {
-      return `${name}>${tempValue.min} ${name}<${tempValue.max}`;
+      return `${name}>=${tempValue.min} ${name}<=${tempValue.max}`;
     } else {
       return `${name}${rangeType}${tempValue.min}`;
     }

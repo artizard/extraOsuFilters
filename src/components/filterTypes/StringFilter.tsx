@@ -16,7 +16,7 @@ export default function StringFilter({ name, label }: FilterProps) {
   const [isSet, setIsSet] = useState(false);
 
   useEffect(() => {
-    const currVal = getFilterParam(name, false);
+    const currVal = getFilterParam(name, "string");
     if (currVal) {
       setSavedValue(currVal.value as string);
       setTempValue(currVal.value as string);
@@ -29,8 +29,10 @@ export default function StringFilter({ name, label }: FilterProps) {
       setSavedValue(tempValue);
       setIsSet(true);
       addQueryParam(getQueryParam(), name);
+      console.log("SAVED: ", getQueryParam());
       return true;
     } else {
+      alert("Please select values before saving.");
       return false;
     }
   };
