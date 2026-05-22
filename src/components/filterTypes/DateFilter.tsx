@@ -77,16 +77,18 @@ export default function DateFilter({ name, label }: FilterProps) {
     <FilterCard
       title={label}
       isSet={isSet}
+      rangeType={rangeType}
       onSave={onSave}
       onCancel={onCancel}
       onRemove={onRemove}
       savedView={() => (
         <div>
           {rangeType === "range" ? (
-            <div>
+            <div className="range-container">
               <div className="filter-input filter-saved date-filter">
                 {savedValue.min}
-              </div>{" "}
+              </div>
+              <div>to</div>
               <div className="filter-input filter-saved date-filter">
                 {savedValue.max}
               </div>
@@ -106,13 +108,14 @@ export default function DateFilter({ name, label }: FilterProps) {
           />
           <div>
             {rangeType === "range" ? (
-              <div>
+              <div className="range-container">
                 <input
                   className="filter-input date-filter"
                   type="date"
                   value={tempValue.min ?? ""}
                   onChange={(e) => onChange(e, "min")}
                 ></input>
+                <div>to</div>
                 <input
                   className="filter-input date-filter"
                   type="date"

@@ -73,42 +73,47 @@ export default function NumberFilter({ name, label }: FilterProps) {
     <FilterCard
       title={label}
       isSet={isSet}
+      rangeType={rangeType}
       onSave={onSave}
       onCancel={onCancel}
       onRemove={onRemove}
       savedView={() => (
         <div>
           {rangeType === "range" ? (
-            <div>
+            <div className="range-container">
               <div className="filter-input filter-saved num-filter">
                 {savedValue.min}
-              </div>{" "}
+              </div>
+              <div>to</div>
               <div className="filter-input filter-saved num-filter">
                 {savedValue.max}
               </div>
             </div>
           ) : (
-            <div className="filter-input filter-saved num-filter">
-              {savedValue.min}
+            <div>
+              <div className="filter-input filter-saved num-filter">
+                {savedValue.min}
+              </div>
             </div>
           )}
         </div>
       )}
       editView={() => (
-        <div>
+        <div className="filter-controls-container ">
           <RangeTypeSelect
             rangeType={rangeType}
             onSelect={(choice) => setRangeType(choice)}
           />
           <div>
             {rangeType === "range" ? (
-              <div>
+              <div className="range-container">
                 <input
                   className="filter-input num-filter"
                   type="number"
                   value={tempValue.min ?? ""}
                   onChange={(e) => onChange(e, "min")}
                 ></input>
+                <div>to</div>
                 <input
                   className="filter-input num-filter"
                   type="number"

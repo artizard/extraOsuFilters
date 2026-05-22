@@ -6,44 +6,44 @@ export default function RangeTypeSelect({
   onSelect: (choice: string) => void;
 }) {
   return (
-    <div>
+    <div className="range-type-container">
       <button
-        className={`num-type-btn ${rangeType === "=" ? "selected-num-type" : ""}`}
+        className={`range-type-btn ${rangeType === "=" ? "selected-range-type" : ""}`}
         title="Equal to"
         onClick={() => onSelect("=")}
       >
         =
       </button>
       <button
-        className={`num-type-btn ${rangeType === "<" ? "selected-num-type" : ""}`}
+        className={`range-type-btn ${rangeType === "<" ? "selected-range-type" : ""}`}
         title="Less than"
         onClick={() => onSelect("<")}
       >
         {"<"}
       </button>
       <button
-        className={`num-type-btn ${rangeType === ">" ? "selected-num-type" : ""}`}
+        className={`range-type-btn ${rangeType === ">" ? "selected-range-type" : ""}`}
         title="Greater than"
         onClick={() => onSelect(">")}
       >
         {">"}
       </button>
       <button
-        className={`num-type-btn ${rangeType === "<=" ? "selected-num-type" : ""}`}
+        className={`range-type-btn ${rangeType === "<=" ? "selected-range-type" : ""}`}
         title="Less than or equal to"
         onClick={() => onSelect("<=")}
       >
         &le;
       </button>
       <button
-        className={`num-type-btn ${rangeType === ">=" ? "selected-num-type" : ""}`}
+        className={`range-type-btn ${rangeType === ">=" ? "selected-range-type" : ""}`}
         title="Greater than or equal to"
         onClick={() => onSelect(">=")}
       >
         &ge;
       </button>
       <button
-        className={`num-type-btn ${rangeType === "range" ? "selected-num-type" : ""}`}
+        className={`range-type-btn ${rangeType === "range" ? "selected-range-type" : ""}`}
         title="Range of values (inclusive)"
         onClick={() => onSelect("range")}
       >

@@ -4,6 +4,7 @@ import "./FilterCard.css";
 interface CardProps {
   title: string;
   isSet: boolean;
+  rangeType?: string;
   savedView: () => React.ReactNode;
   editView: () => React.ReactNode;
   onSave: () => boolean;
@@ -14,6 +15,7 @@ interface CardProps {
 export default function FilterCard({
   title = "Filter Name",
   isSet,
+  rangeType = "no-prefix",
   savedView,
   editView,
   onSave,
@@ -35,18 +37,38 @@ export default function FilterCard({
     onRemove();
   };
 
+  const renderRangeType = () => {
+    if (rangeType === "no-prefix") return null;
+    let symbol = rangeType;
+    if (rangeType === "<=") {
+      symbol = "\u2264";
+    } else if (rangeType === ">=") {
+      symbol = "\u2265";
+    }
+    return <div className="range-type-icon">{symbol}</div>;
+  };
+
   return (
     <div className="filter-card">
-      <div>{title}</div>
+      <div className="filter-name">{title}</div>
+      {isSet && renderRangeType()}
       {isEditing ? editView() : isSet && savedView()}
       {!isEditing &&
         (isSet ? (
-          <div>
-            <button className="edit-btn" onClick={() => setIsEditing(true)}>
-              Edit
+          <div className="filter-controls-container">
+            <button
+              className="edit-btn"
+              onClick={() => setIsEditing(true)}
+              title="Edit Filter"
+            >
+              <i className="fas fa-pen-square"></i>
             </button>
-            <button className="cancel-btn" onClick={handleRemove}>
-              Remove Filter
+            <button
+              className="cancel-btn"
+              onClick={handleRemove}
+              title="Remove Filter"
+            >
+              <i className="fas fa-trash"></i>
             </button>
           </div>
         ) : (
@@ -55,12 +77,16 @@ export default function FilterCard({
           </button>
         ))}
       {isEditing && (
-        <div>
-          <button className="cancel-btn" onClick={handleCancel}>
-            Cancel
+        <div className="filter-controls-container">
+          <button className="save-btn" onClick={handleSave} title="Save Filter">
+            <i className="fas fa-save"></i>
           </button>
-          <button className="save-btn" onClick={handleSave}>
-            Save
+          <button
+            className="cancel-btn"
+            onClick={handleCancel}
+            title="Cancel Edit"
+          >
+            <i className="fas fa-window-close"></i>
           </button>
         </div>
       )}

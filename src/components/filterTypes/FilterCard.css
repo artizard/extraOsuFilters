@@ -1,6 +1,7 @@
 .filter-card {
   display: flex;
   gap: 5px;
+  align-items: center;
 }
 
 .edit-btn,
@@ -9,6 +10,8 @@
 .add-btn {
   border: none;
   border-radius: 3px;
+  font-size: 18px;
+  align-self: center;
 }
 .edit-btn {
   background-color: rgb(89, 102, 108);
@@ -24,7 +27,11 @@
   background-color: rgb(217, 108, 108);
 }
 
-.num-type-btn {
+.filter-name {
+  width: 120px;
+}
+
+.range-type-btn {
   border: none;
   border-radius: 3px;
   background-color: rgb(89, 102, 108);
@@ -33,17 +40,28 @@
     background-color: rgb(125, 138, 143);
   }
 }
-.selected-num-type {
+.selected-range-type {
   background-color: rgb(154, 177, 188);
 
   &:hover {
     background-color: rgb(177, 196, 204);
   }
 }
+.range-type-container {
+  position: absolute;
+  display: flex;
+  gap: 2px;
+  top: -25px;
+  left: -50px;
+  z-index: 10;
+}
+.filter-controls-container {
+  position: relative;
+}
 
 .filter-input {
   background-color: rgb(134, 142, 146);
-
+  border-radius: 3px;
   text-align: center;
 }
 .num-filter {
@@ -57,4 +75,25 @@
 }
 .filter-saved {
   user-select: none;
+}
+
+.range-container {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.filter-controls-container {
+  display: flex;
+  gap: 6px;
+}
+.range-type-icon {
+  background-color: rgb(125, 138, 143);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  font-size: 18px;
+  border-radius: 5px;
 }
