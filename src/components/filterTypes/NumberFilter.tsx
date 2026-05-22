@@ -3,13 +3,14 @@ import FilterCard from "./FilterCard";
 import { addQueryParam } from "@/utils/queryEdit";
 import RangeTypeSelect from "./RangeType";
 import { useRangeFilter } from "@/hooks/useRangeFilter";
+import { FilterProps } from "@/type";
 
-interface FilterProps {
-  name: string;
-  label: string;
-}
-
-export default function NumberFilter({ name, label }: FilterProps) {
+export default function NumberFilter({
+  name,
+  label,
+  editing,
+  disabled,
+}: FilterProps) {
   const {
     rangeType,
     setRangeType,
@@ -77,6 +78,8 @@ export default function NumberFilter({ name, label }: FilterProps) {
       onSave={onSave}
       onCancel={onCancel}
       onRemove={onRemove}
+      editing={editing}
+      disabled={disabled}
       savedView={() => (
         <div>
           {rangeType === "range" ? (
@@ -99,7 +102,7 @@ export default function NumberFilter({ name, label }: FilterProps) {
         </div>
       )}
       editView={() => (
-        <div className="filter-controls-container ">
+        <div className="filter-controls-container">
           <RangeTypeSelect
             rangeType={rangeType}
             onSelect={(choice) => setRangeType(choice)}

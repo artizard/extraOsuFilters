@@ -2,10 +2,10 @@
   background-color: rgb(72, 81, 84);
   width: 100%;
   border: none;
-  padding: 10px;
   border-radius: 4px;
   color: hsl(var(--hsl-l2));
   user-select: none;
+  height: 65px;
 
   &:hover {
     background-color: rgb(89, 102, 108);
@@ -34,7 +34,6 @@
   border-radius: 10px 0 0 10px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
   height: 400px;
-  gap: 7px;
 }
 
 .filter-screen {

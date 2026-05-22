@@ -5,6 +5,7 @@
   background-color: rgb(73, 83, 88);
   padding: 10px 10px;
   border-radius: 5px;
+  height: 45px;
 }
 
 .edit-btn,
@@ -25,10 +26,14 @@
 }
 .add-btn {
   background-color: rgb(89, 102, 108);
+  width: 100%;
   &:hover {
     background-color: rgb(125, 138, 143);
   }
-  width: 300px;
+  &:disabled {
+    background-color: rgba(69, 77, 81, 0.67);
+    cursor: not-allowed;
+  }
 }
 
 .save-btn {
@@ -75,7 +80,8 @@
   border-radius: 5px;
   gap: 2px;
   top: -50px;
-  left: -50px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 10;
 }
 .filter-controls-container {
@@ -91,7 +97,7 @@
   width: 75px;
 }
 .string-filter {
-  width: 250px;
+  width: 240px;
 }
 .date-filter {
   width: 150px;

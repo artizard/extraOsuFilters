@@ -1,15 +1,29 @@
+import { useFilterEditing } from "@/hooks/useFilterEditing";
 import StringFilter from "../filterTypes/StringFilter";
 
 export default function MapInfo() {
+  const { getEditProps } = useFilterEditing();
+
+  const MAP_INFO_FILTERS = [
+    { name: "artist", label: "artist name" },
+    { name: "title", label: "song title" },
+    { name: "source", label: "song source/origin" },
+    { name: "creator", label: "mapper name" },
+    { name: "difficulty", label: "difficulty name" },
+  ];
+
   return (
     <div className="filter-screen">
-      <span className="user-tag-picker__category">Map Info</span>
+      <span className="user-tag-picker__category">map info</span>
       <div className="filter-container">
-        <StringFilter name="artist" label="Artist Name" />
-        <StringFilter name="title" label="Song Title" />
-        <StringFilter name="source" label="Song Source/Origin" />
-        <StringFilter name="creator" label="Mapper Name" />
-        <StringFilter name="difficulty" label="Difficulty Name" />
+        {MAP_INFO_FILTERS.map((filter) => (
+          <StringFilter
+            key={filter.name}
+            name={filter.name}
+            label={filter.label}
+            {...getEditProps(filter.name)}
+          />
+        ))}
       </div>
     </div>
   );

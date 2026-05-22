@@ -13,11 +13,11 @@ export default function FilterMenu({ defaultMenu }: MenuProps) {
   const [currTab, setCurrTab] = useState("mapInfo");
 
   const tabs = [
-    { id: "mapInfo", label: "Map Info" },
-    { id: "difficulty", label: "Difficulty" },
-    { id: "mapStats", label: "Map Stats" },
-    { id: "dates", label: "Dates" },
-    { id: "tags", label: "User Tags" },
+    { id: "mapInfo", label: "map info" },
+    { id: "difficulty", label: "difficulty" },
+    { id: "mapStats", label: "map stats" },
+    { id: "dates", label: "dates" },
+    { id: "tags", label: "user tags" },
   ];
 
   // if the user has tags selected, then show the site's original div,

@@ -5,12 +5,14 @@ import {
   getFilterParam,
   removeQueryParam,
 } from "@/utils/queryEdit";
+import { FilterProps } from "@/type";
 
-interface FilterProps {
-  name: string;
-  label: string;
-}
-export default function StringFilter({ name, label }: FilterProps) {
+export default function StringFilter({
+  name,
+  label,
+  editing,
+  disabled,
+}: FilterProps) {
   const [savedValue, setSavedValue] = useState("");
   const [tempValue, setTempValue] = useState("");
   const [isSet, setIsSet] = useState(false);
@@ -29,7 +31,6 @@ export default function StringFilter({ name, label }: FilterProps) {
       setSavedValue(tempValue);
       setIsSet(true);
       addQueryParam(getQueryParam(), name);
-      console.log("SAVED: ", getQueryParam());
       return true;
     } else {
       alert("Please select values before saving.");
@@ -58,6 +59,8 @@ export default function StringFilter({ name, label }: FilterProps) {
         onSave={onSave}
         onCancel={onCancel}
         onRemove={onRemove}
+        editing={editing}
+        disabled={disabled}
         savedView={() => (
           <div className="filter-input filter-saved string-filter">
             {savedValue}

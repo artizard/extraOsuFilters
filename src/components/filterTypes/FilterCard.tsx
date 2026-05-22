@@ -1,5 +1,5 @@
-import { useState } from "react";
 import "./FilterCard.css";
+import { Editing } from "@/type";
 
 interface CardProps {
   title: string;
@@ -10,6 +10,8 @@ interface CardProps {
   onSave: () => boolean;
   onCancel: () => void;
   onRemove: () => void;
+  editing: Editing;
+  disabled: boolean;
 }
 
 export default function FilterCard({
@@ -21,17 +23,17 @@ export default function FilterCard({
   onSave,
   onCancel,
   onRemove,
+  editing,
+  disabled,
 }: CardProps) {
-  const [isEditing, setIsEditing] = useState(false);
-
   const handleSave = () => {
     if (onSave()) {
-      setIsEditing(false);
+      editing.onEditEnd();
     }
   };
   const handleCancel = () => {
     onCancel();
-    setIsEditing(false);
+    editing.onEditEnd();
   };
   const handleRemove = () => {
     onRemove();
@@ -50,16 +52,16 @@ export default function FilterCard({
 
   return (
     <div className="filter-card">
-      <div className="filter-name">{title.toLowerCase()}</div>
+      <div className="filter-name">{title}</div>
       <div className="filter-input-controls">
         {isSet && renderRangeType()}
-        {isEditing ? editView() : isSet && savedView()}
-        {!isEditing &&
+        {editing.isEditing ? editView() : isSet && savedView()}
+        {!editing.isEditing &&
           (isSet ? (
             <div className="filter-controls-container">
               <button
                 className="edit-btn"
-                onClick={() => setIsEditing(true)}
+                onClick={() => editing.onEditStart()}
                 title="Edit Filter"
               >
                 <i className="fas fa-pen-square"></i>
@@ -73,11 +75,15 @@ export default function FilterCard({
               </button>
             </div>
           ) : (
-            <button className="add-btn" onClick={() => setIsEditing(true)}>
+            <button
+              className="add-btn"
+              disabled={disabled}
+              onClick={() => editing.onEditStart()}
+            >
               add filter
             </button>
           ))}
-        {isEditing && (
+        {editing.isEditing && (
           <div className="filter-controls-container">
             <button
               className="save-btn"
