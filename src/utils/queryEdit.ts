@@ -1,7 +1,10 @@
 import { sendNewQuery } from "../content/content";
 
-// Returns the query parameters as a string array
-function getQueryArr(): string[] {
+// Returns the filters and base search text within the query
+// I need to be able to handle and filter through the actual filters while still maintaining
+// whatever non-filter text the user has inputted, so I parse that here and return an object
+// which gives the base search and an array of filters
+function parseQuery() {
   let query;
   const searchBar = document.querySelector(
     "input.beatmapsets-search__input",
@@ -15,17 +18,34 @@ function getQueryArr(): string[] {
     const url = new URL(window.location.href);
     query = url.searchParams.get("q") ?? "";
   }
-  return sanitizeParams(
-    query.match(/[^\s"]+(?:([<>]=?)|=)(?:[^\s"]+|"[^"]*")/g) || [],
-  );
+  // split into tokens (regex to not split on spaces within quotes)
+  const tokens = query.match(/(?:[^\s"]+|"[^"]*")+/g) || [];
+
+  const baseSearch: string[] = [];
+  const filters: string[] = [];
+
+  const filterPattern = /[^^\s"]+(?:([<>]=?)|=)(?:[^\s"]+|"[^"]*")$/;
+
+  // divide up into baseSearch and filters
+  for (const token of tokens) {
+    if (filterPattern.test(token)) {
+      filters.push(token);
+    } else {
+      baseSearch.push(token);
+    }
+  }
+  return {
+    filters: sanitizeParams(filters),
+    baseSearch: baseSearch.join(" "),
+  };
 }
 
 // adds the given filter
 export function addQueryParam(param: string, filterName: string) {
-  const query = getQueryArr();
-  let editedQuery = query.filter((i) => !isFilterMatch(filterName, i));
+  const { filters, baseSearch } = parseQuery();
+  let editedQuery = filters.filter((i) => !isFilterMatch(filterName, i));
   editedQuery.push(`${param}`);
-  const newQuery = editedQuery.join(" ");
+  const newQuery = `${baseSearch} ${editedQuery.join(" ")}`.trim();
   sendNewQuery(newQuery);
 }
 
@@ -38,9 +58,9 @@ function isFilterMatch(filter: string, item: string) {
 
 // removes the desired filter
 export function removeQueryParam(filterName: string) {
-  const query = getQueryArr();
-  let editedQuery = query.filter((i) => !isFilterMatch(filterName, i));
-  const newQuery = editedQuery.join(" ");
+  const { filters, baseSearch } = parseQuery();
+  let editedQuery = filters.filter((i) => !isFilterMatch(filterName, i));
+  const newQuery = `${baseSearch} ${editedQuery.join(" ")}`.trim();
   sendNewQuery(newQuery);
 }
 
@@ -77,14 +97,18 @@ function parseQueryParam(param: string): ParsedParam | null {
   const parts = param.split(/([<>]=?|=)/);
   if (parts.length < 3) return null;
   // I had to make sure to join any extra elements, otherwise you would miss part of strings if there were equal signs, etc.
-  return { filter: parts[0], operator: parts[1], value: parts.slice(2).join() };
+  return {
+    filter: parts[0],
+    operator: parts[1],
+    value: parts.slice(2).join(""),
+  };
 }
 
 export function getFilterParam(
   filter: string,
   filterType: string,
 ): RangeResult | StringResult | undefined {
-  const query = getQueryArr();
+  const query = parseQuery().filters;
   const rawParams = query.filter((element) => isFilterMatch(filter, element));
 
   // parse each parameter

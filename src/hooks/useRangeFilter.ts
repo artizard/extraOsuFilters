@@ -11,8 +11,8 @@ interface Values {
   max: number | null;
 }
 
-// This hook is for any filter that can store a range. I originally didn't use this and just had a bunch of reused code between DateFilter
-// and NumberFilter, but I made this to reuse that code. It's probably unecessary for two components but idk.
+// This hook is for any filter that can store a range. This is to reuse some code, but it may be unecessary considering only two
+// components use it but idk.
 export function useRangeFilter<T>({
   name,
   filterType,
