@@ -1,52 +1,27 @@
-import { useState, ChangeEvent, useEffect } from "react";
+import { ChangeEvent } from "react";
 import FilterCard from "./FilterCard";
-import {
-  addQueryParam,
-  getFilterParam,
-  removeQueryParam,
-} from "@/content/queryEdit";
+import { addQueryParam } from "@/utils/queryEdit";
 import RangeTypeSelect from "./RangeType";
+import { useRangeFilter } from "@/hooks/useRangeFilter";
 
 interface FilterProps {
   name: string;
   label: string;
 }
-interface Values {
-  min: string | null;
-  max: string | null;
-}
-
 export default function DateFilter({ name, label }: FilterProps) {
-  const [rangeType, setRangeType] = useState("="); // can be =, <, <=, >, >=, range
-  const [savedValue, setSavedValue] = useState<Values>({
-    min: "",
-    max: "",
-  });
-  const [tempValue, setTempValue] = useState<Values>(savedValue);
-  const [isSet, setIsSet] = useState(false);
-
-  useEffect(() => {
-    const currVal = getFilterParam(name, "date");
-    if (currVal) {
-      setRangeType(currVal.rangeType);
-      let newVal;
-      if (currVal.rangeType === "range") {
-        newVal = {
-          min: currVal.value.min,
-          max: currVal.value.max,
-        } as Values;
-        setSavedValue(newVal);
-      } else {
-        newVal = {
-          min: currVal.value,
-          max: null,
-        } as Values;
-      }
-      setSavedValue(newVal);
-      setTempValue(newVal);
-      setIsSet(true);
-    }
-  }, []);
+  const {
+    rangeType,
+    setRangeType,
+    savedValue,
+    setSavedValue,
+    tempValue,
+    setTempValue,
+    isSet,
+    setIsSet,
+    onCancel,
+    onRemove,
+    getQueryParam,
+  } = useRangeFilter<string>({ name, filterType: "date", parseValue: String });
 
   const onSave = () => {
     if (tempValue.min == null) {
@@ -93,23 +68,9 @@ export default function DateFilter({ name, label }: FilterProps) {
     addQueryParam(getQueryParam(), name);
     return true;
   };
-  const onCancel = () => {
-    setTempValue(savedValue);
-  };
+
   const onChange = (event: ChangeEvent<HTMLInputElement>, maxMin: string) => {
     setTempValue((prev) => ({ ...prev, [maxMin]: event.target.value }));
-  };
-  const onRemove = () => {
-    removeQueryParam(name);
-    setIsSet(false);
-  };
-  const getQueryParam = () => {
-    // using temp value since saved value might not be updated yet
-    if (rangeType == "range") {
-      return `${name}>=${tempValue.min} ${name}<=${tempValue.max}`;
-    } else {
-      return `${name}${rangeType}${tempValue.min}`;
-    }
   };
 
   return (
@@ -149,13 +110,13 @@ export default function DateFilter({ name, label }: FilterProps) {
                 <input
                   className="filter-input date-filter"
                   type="date"
-                  value={tempValue.min || ""}
+                  value={tempValue.min ?? ""}
                   onChange={(e) => onChange(e, "min")}
                 ></input>
                 <input
                   className="filter-input date-filter"
                   type="date"
-                  value={tempValue.max || ""}
+                  value={tempValue.max ?? ""}
                   onChange={(e) => onChange(e, "max")}
                 ></input>
               </div>
@@ -163,7 +124,7 @@ export default function DateFilter({ name, label }: FilterProps) {
               <input
                 className="filter-input date-filter"
                 type="date"
-                value={tempValue.min || ""}
+                value={tempValue.min ?? ""}
                 onChange={(e) => onChange(e, "min")}
               ></input>
             )}

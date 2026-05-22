@@ -1,4 +1,4 @@
-import { sendNewQuery } from "./content";
+import { sendNewQuery } from "../content/content";
 
 // Returns the query parameters as a string array
 function getQueryArr(): string[] {
@@ -23,16 +23,23 @@ function getQueryArr(): string[] {
 // adds the given filter
 export function addQueryParam(param: string, filterName: string) {
   const query = getQueryArr();
-  let editedQuery = query.filter((i) => !i.startsWith(filterName));
+  let editedQuery = query.filter((i) => !isFilterMatch(filterName, i));
   editedQuery.push(`${param}`);
   const newQuery = editedQuery.join(" ");
   sendNewQuery(newQuery);
 }
 
+// it wasn't enough to just do .startsWith() to filter the right filter because there are some overlapping filters
+// like "ar" and "artist", plus the user could input non-existent filters that would match with a real one
+function isFilterMatch(filter: string, item: string) {
+  if (!item.startsWith(filter)) return false;
+  return ["=", "<", "<=", ">", ">="].includes(item.charAt(filter.length));
+}
+
 // removes the desired filter
 export function removeQueryParam(filterName: string) {
   const query = getQueryArr();
-  let editedQuery = query.filter((i) => !i.startsWith(filterName));
+  let editedQuery = query.filter((i) => !isFilterMatch(filterName, i));
   const newQuery = editedQuery.join(" ");
   sendNewQuery(newQuery);
 }
@@ -67,10 +74,8 @@ interface ParsedParam {
   value: string;
 }
 function parseQueryParam(param: string): ParsedParam | null {
-  console.log("PARAM: ", param);
   const parts = param.split(/([<>]=?|=)/);
   if (parts.length < 3) return null;
-  console.log("PARTS: ", parts);
   // I had to make sure to join any extra elements, otherwise you would miss part of strings if there were equal signs, etc.
   return { filter: parts[0], operator: parts[1], value: parts.slice(2).join() };
 }
@@ -80,13 +85,7 @@ export function getFilterParam(
   filterType: string,
 ): RangeResult | StringResult | undefined {
   const query = getQueryArr();
-  console.log("QUERY: ", query);
-  const rawParams = query.filter((element) => {
-    // it wasn't enough to just do .startsWith() because there are some overlapping filters like "ar" and "artist", plus the
-    // user could input non-existent filters that would match with a real one
-    if (!element.startsWith(filter)) return false;
-    return ["=", "<", "<=", ">", ">="].includes(element.charAt(filter.length));
-  });
+  const rawParams = query.filter((element) => isFilterMatch(filter, element));
 
   // parse each parameter
   const parsedParams = rawParams

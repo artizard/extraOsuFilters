@@ -1,51 +1,32 @@
-import { useState, ChangeEvent, useEffect } from "react";
+import { ChangeEvent } from "react";
 import FilterCard from "./FilterCard";
-import {
-  addQueryParam,
-  getFilterParam,
-  removeQueryParam,
-} from "@/content/queryEdit";
+import { addQueryParam } from "@/utils/queryEdit";
 import RangeTypeSelect from "./RangeType";
+import { useRangeFilter } from "@/hooks/useRangeFilter";
 
 interface FilterProps {
   name: string;
   label: string;
 }
-interface Values {
-  min: number | null;
-  max: number | null;
-}
-export default function NumberFilter({ name, label }: FilterProps) {
-  const [rangeType, setRangeType] = useState("="); // can be =, <, <=, >, >=, range
-  const [savedValue, setSavedValue] = useState<Values>({
-    min: null,
-    max: null,
-  });
-  const [tempValue, setTempValue] = useState<Values>({ min: null, max: null });
-  const [isSet, setIsSet] = useState(false);
 
-  useEffect(() => {
-    const currVal = getFilterParam(name, "number");
-    if (currVal) {
-      setRangeType(currVal.rangeType);
-      let newVal;
-      if (currVal.rangeType === "range") {
-        newVal = {
-          min: Number(currVal.value.min),
-          max: Number(currVal.value.max),
-        } as Values;
-        setSavedValue(newVal);
-      } else {
-        newVal = {
-          min: Number(currVal.value),
-          max: null,
-        } as Values;
-      }
-      setSavedValue(newVal);
-      setTempValue(newVal);
-      setIsSet(true);
-    }
-  }, []);
+export default function NumberFilter({ name, label }: FilterProps) {
+  const {
+    rangeType,
+    setRangeType,
+    savedValue,
+    setSavedValue,
+    tempValue,
+    setTempValue,
+    isSet,
+    setIsSet,
+    onCancel,
+    onRemove,
+    getQueryParam,
+  } = useRangeFilter<number>({
+    name,
+    filterType: "number",
+    parseValue: Number,
+  });
 
   const onSave = () => {
     if (tempValue.min === null) {
@@ -79,24 +60,13 @@ export default function NumberFilter({ name, label }: FilterProps) {
     addQueryParam(getQueryParam(), name);
     return true;
   };
-  const onCancel = () => {
-    setTempValue(savedValue);
-  };
 
   const onChange = (event: ChangeEvent<HTMLInputElement>, maxMin: string) => {
-    setTempValue((prev) => ({ ...prev, [maxMin]: Number(event.target.value) }));
-  };
-  const onRemove = () => {
-    removeQueryParam(name);
-    setIsSet(false);
-  };
-  const getQueryParam = () => {
-    // using temp value since saved value might not be updated yet
-    if (rangeType == "range") {
-      return `${name}>=${tempValue.min} ${name}<=${tempValue.max}`;
-    } else {
-      return `${name}${rangeType}${tempValue.min}`;
-    }
+    const val = event.target.value;
+    setTempValue((prev) => ({
+      ...prev,
+      [maxMin]: val === "" ? null : Number(val),
+    }));
   };
 
   return (
@@ -136,13 +106,13 @@ export default function NumberFilter({ name, label }: FilterProps) {
                 <input
                   className="filter-input num-filter"
                   type="number"
-                  value={tempValue.min || ""}
+                  value={tempValue.min ?? ""}
                   onChange={(e) => onChange(e, "min")}
                 ></input>
                 <input
                   className="filter-input num-filter"
                   type="number"
-                  value={tempValue.max || ""}
+                  value={tempValue.max ?? ""}
                   onChange={(e) => onChange(e, "max")}
                 ></input>
               </div>
@@ -150,7 +120,7 @@ export default function NumberFilter({ name, label }: FilterProps) {
               <input
                 className="filter-input num-filter"
                 type="number"
-                value={tempValue.min || ""}
+                value={tempValue.min ?? ""}
                 onChange={(e) => onChange(e, "min")}
               ></input>
             )}

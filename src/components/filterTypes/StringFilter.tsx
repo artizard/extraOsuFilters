@@ -4,7 +4,7 @@ import {
   addQueryParam,
   getFilterParam,
   removeQueryParam,
-} from "@/content/queryEdit";
+} from "@/utils/queryEdit";
 
 interface FilterProps {
   name: string;

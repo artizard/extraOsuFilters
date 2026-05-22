@@ -28,7 +28,7 @@ export default function FilterMenu({ defaultMenu }: MenuProps) {
     } else {
       defaultMenu.style.display = "none";
     }
-  }, [currTab]);
+  }, [currTab, defaultMenu]);
 
   const renderCurrTab = () => {
     switch (currTab) {
