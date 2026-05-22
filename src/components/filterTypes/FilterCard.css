@@ -2,7 +2,7 @@
   display: flex;
   gap: 5px;
   align-items: center;
-  background-color: rgb(73, 83, 88);
+  background-color: hsl(var(--hsl-b3));
   padding: 10px 10px;
   border-radius: 5px;
   height: 45px;
@@ -25,14 +25,15 @@
   }
 }
 .add-btn {
-  background-color: rgb(89, 102, 108);
+  background-color: rgb(78, 95, 104);
   width: 100%;
   &:hover {
     background-color: rgb(125, 138, 143);
   }
   &:disabled {
-    background-color: rgba(69, 77, 81, 0.67);
+    opacity: 75%;
     cursor: not-allowed;
+    pointer-events: none;
   }
 }
 
@@ -57,18 +58,18 @@
 .range-type-btn {
   border: none;
   border-radius: 3px;
-  background-color: rgb(89, 102, 108);
+  background-color: hsl(var(--hsl-b3));
   user-select: none;
 
   &:hover {
-    background-color: rgb(125, 138, 143);
+    background-color: hsl(var(--hsl-b2));
   }
 }
 .selected-range-type {
-  background-color: rgb(154, 177, 188);
+  background-color: hsl(var(--hsl-h2));
 
   &:hover {
-    background-color: rgb(177, 196, 204);
+    background-color: hsl(var(--hsl-h1));
   }
 }
 .range-type-container {
@@ -89,7 +90,7 @@
 }
 
 .filter-input {
-  background-color: rgb(134, 142, 146);
+  background-color: hsl(var(--hsl-b5));
   border-radius: 3px;
   text-align: center;
 }

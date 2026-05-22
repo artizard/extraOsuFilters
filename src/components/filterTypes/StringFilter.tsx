@@ -71,6 +71,7 @@ export default function StringFilter({
             <input
               className="filter-input string-filter"
               type="text"
+              placeholder={`type value`}
               value={tempValue}
               onChange={onChange}
             ></input>

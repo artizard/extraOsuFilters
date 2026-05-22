@@ -14,9 +14,10 @@
 }
 .selected-tab {
   color: rgb(255, 255, 255);
-
+  background-color: hsl(var(--hsl-h2));
   &:hover {
     color: rgb(255, 255, 255);
+    background-color: hsl(var(--hsl-h1));
   }
 }
 
