@@ -2,6 +2,9 @@
   display: flex;
   gap: 5px;
   align-items: center;
+  background-color: rgb(73, 83, 88);
+  padding: 10px 10px;
+  border-radius: 5px;
 }
 
 .edit-btn,
@@ -12,29 +15,45 @@
   border-radius: 3px;
   font-size: 18px;
   align-self: center;
+  user-select: none;
 }
 .edit-btn {
   background-color: rgb(89, 102, 108);
+  &:hover {
+    background-color: rgb(125, 138, 143);
+  }
 }
 .add-btn {
   background-color: rgb(89, 102, 108);
+  &:hover {
+    background-color: rgb(125, 138, 143);
+  }
+  width: 300px;
 }
 
 .save-btn {
   background-color: rgb(89, 102, 108);
+  &:hover {
+    background-color: rgb(125, 138, 143);
+  }
 }
 .cancel-btn {
   background-color: rgb(217, 108, 108);
+  &:hover {
+    background-color: rgb(190, 111, 111);
+  }
 }
 
 .filter-name {
-  width: 120px;
+  width: 200px;
+  text-align: left;
 }
 
 .range-type-btn {
   border: none;
   border-radius: 3px;
   background-color: rgb(89, 102, 108);
+  user-select: none;
 
   &:hover {
     background-color: rgb(125, 138, 143);
@@ -50,8 +69,12 @@
 .range-type-container {
   position: absolute;
   display: flex;
+  background-color: rgb(83, 95, 105);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  padding: 10px;
+  border-radius: 5px;
   gap: 2px;
-  top: -25px;
+  top: -50px;
   left: -50px;
   z-index: 10;
 }
@@ -65,7 +88,7 @@
   text-align: center;
 }
 .num-filter {
-  width: 50px;
+  width: 75px;
 }
 .string-filter {
   width: 250px;
@@ -88,12 +111,22 @@
   gap: 6px;
 }
 .range-type-icon {
-  background-color: rgb(125, 138, 143);
+  background-color: rgb(134, 142, 146);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
-  height: 16px;
+  height: 18px;
+  width: 18px;
   font-size: 18px;
   border-radius: 5px;
+  padding-bottom: 2px;
+  padding-left: 1px;
+}
+
+.filter-input-controls {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }

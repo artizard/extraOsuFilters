@@ -5,6 +5,7 @@
   padding: 10px;
   border-radius: 4px;
   color: hsl(var(--hsl-l2));
+  user-select: none;
 
   &:hover {
     background-color: rgb(89, 102, 108);
@@ -45,15 +46,15 @@
   background-color: rgb(46, 53, 56);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
   width: calc(100vw - 66px);
-  padding: 15px 10px;
+  padding: 15px 15px;
 }
 
 .filter-container {
   display: flex;
   flex-direction: column;
-  padding: 30px 10px;
+  padding: 15px 0px;
   justify-content: space-between;
-  gap: 25px;
+  gap: 10px;
 }
 
 .menu-container {

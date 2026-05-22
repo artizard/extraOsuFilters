@@ -3,7 +3,7 @@ import NumberFilter from "../filterTypes/NumberFilter";
 export default function Difficulty() {
   return (
     <div className="filter-screen">
-      <span className="user-tag-picker__category">Difficulty</span>
+      <span className="user-tag-picker__category">difficulty</span>
       <div className="filter-container">
         <NumberFilter name="ar" label="Approach Rate" />
         <NumberFilter name="cs" label="Circle Size" />

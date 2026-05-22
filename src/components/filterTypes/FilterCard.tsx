@@ -38,7 +38,7 @@ export default function FilterCard({
   };
 
   const renderRangeType = () => {
-    if (rangeType === "no-prefix") return null;
+    if (rangeType === "no-prefix" || rangeType === "range") return null;
     let symbol = rangeType;
     if (rangeType === "<=") {
       symbol = "\u2264";
@@ -50,46 +50,52 @@ export default function FilterCard({
 
   return (
     <div className="filter-card">
-      <div className="filter-name">{title}</div>
-      {isSet && renderRangeType()}
-      {isEditing ? editView() : isSet && savedView()}
-      {!isEditing &&
-        (isSet ? (
+      <div className="filter-name">{title.toLowerCase()}</div>
+      <div className="filter-input-controls">
+        {isSet && renderRangeType()}
+        {isEditing ? editView() : isSet && savedView()}
+        {!isEditing &&
+          (isSet ? (
+            <div className="filter-controls-container">
+              <button
+                className="edit-btn"
+                onClick={() => setIsEditing(true)}
+                title="Edit Filter"
+              >
+                <i className="fas fa-pen-square"></i>
+              </button>
+              <button
+                className="cancel-btn"
+                onClick={handleRemove}
+                title="Remove Filter"
+              >
+                <i className="fas fa-trash"></i>
+              </button>
+            </div>
+          ) : (
+            <button className="add-btn" onClick={() => setIsEditing(true)}>
+              add filter
+            </button>
+          ))}
+        {isEditing && (
           <div className="filter-controls-container">
             <button
-              className="edit-btn"
-              onClick={() => setIsEditing(true)}
-              title="Edit Filter"
+              className="save-btn"
+              onClick={handleSave}
+              title="Save Filter"
             >
-              <i className="fas fa-pen-square"></i>
+              <i className="fas fa-save"></i>
             </button>
             <button
               className="cancel-btn"
-              onClick={handleRemove}
-              title="Remove Filter"
+              onClick={handleCancel}
+              title="Cancel Edit"
             >
-              <i className="fas fa-trash"></i>
+              <i className="fas fa-window-close"></i>
             </button>
           </div>
-        ) : (
-          <button className="add-btn" onClick={() => setIsEditing(true)}>
-            Add Filter
-          </button>
-        ))}
-      {isEditing && (
-        <div className="filter-controls-container">
-          <button className="save-btn" onClick={handleSave} title="Save Filter">
-            <i className="fas fa-save"></i>
-          </button>
-          <button
-            className="cancel-btn"
-            onClick={handleCancel}
-            title="Cancel Edit"
-          >
-            <i className="fas fa-window-close"></i>
-          </button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

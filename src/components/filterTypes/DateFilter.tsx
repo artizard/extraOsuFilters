@@ -101,7 +101,7 @@ export default function DateFilter({ name, label }: FilterProps) {
         </div>
       )}
       editView={() => (
-        <div>
+        <div className="filter-controls-container ">
           <RangeTypeSelect
             rangeType={rangeType}
             onSelect={(choice) => setRangeType(choice)}
