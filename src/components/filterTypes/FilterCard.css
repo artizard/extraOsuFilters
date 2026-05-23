@@ -7,6 +7,9 @@
   border-radius: 5px;
   height: 43px;
 }
+.active-filter-card {
+  outline: 2px solid rgb(125, 138, 143);
+}
 
 .edit-btn,
 .save-btn,
@@ -17,6 +20,10 @@
   font-size: 18px;
   align-self: center;
   user-select: none;
+  &:disabled {
+    opacity: 75%;
+    pointer-events: none;
+  }
 }
 .edit-btn {
   background-color: rgb(89, 102, 108);
@@ -29,10 +36,6 @@
   width: 100%;
   &:hover {
     background-color: rgb(105, 123, 132);
-  }
-  &:disabled {
-    opacity: 75%;
-    pointer-events: none;
   }
 }
 
@@ -93,6 +96,9 @@
   border-radius: 3px;
   text-align: center;
   user-select: none;
+  &:focus {
+    outline: 1.5px solid rgb(141, 157, 167);
+  }
 }
 .num-filter {
   width: 75px;

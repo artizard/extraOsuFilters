@@ -51,7 +51,7 @@ export default function FilterCard({
   };
 
   return (
-    <div className="filter-card">
+    <div className={`filter-card ${editing.isEditing && "active-filter-card"}`}>
       <div className="filter-name">{title}</div>
       <div className="filter-input-controls">
         {isSet && renderRangeType()}
@@ -61,6 +61,7 @@ export default function FilterCard({
             <div className="filter-controls-container">
               <button
                 className="edit-btn"
+                disabled={disabled}
                 onClick={() => editing.onEditStart()}
                 title="Edit Filter"
               >
@@ -68,6 +69,7 @@ export default function FilterCard({
               </button>
               <button
                 className="cancel-btn"
+                disabled={disabled}
                 onClick={handleRemove}
                 title="Remove Filter"
               >
