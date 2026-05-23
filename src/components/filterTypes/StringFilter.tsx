@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, useEffect } from "react";
+import { useState, ChangeEvent, useEffect, useRef } from "react";
 import FilterCard from "./FilterCard";
 import {
   addQueryParam,
@@ -16,6 +16,7 @@ export default function StringFilter({
   const [savedValue, setSavedValue] = useState("");
   const [tempValue, setTempValue] = useState("");
   const [isSet, setIsSet] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const currVal = getFilterParam(name, "string");
@@ -25,6 +26,11 @@ export default function StringFilter({
       setIsSet(true);
     }
   }, []);
+
+  // autoselect input
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [editing.isEditing]);
 
   const onSave = () => {
     if (tempValue.trim()) {
@@ -70,8 +76,9 @@ export default function StringFilter({
           <div>
             <input
               className="filter-input string-filter"
+              ref={inputRef}
               type="text"
-              placeholder={`type value`}
+              placeholder={`type ${name}`}
               value={tempValue}
               onChange={onChange}
             ></input>

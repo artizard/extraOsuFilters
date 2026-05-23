@@ -55,7 +55,6 @@ const observer = new MutationObserver(() => {
 });
 
 observer.observe(document.documentElement, { childList: true, subtree: true });
-console.log("Osu! extension test");
 
 // change tag icon and text to filter
 const tagButton = document.querySelector(

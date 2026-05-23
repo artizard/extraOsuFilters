@@ -1,4 +1,4 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, useEffect, useRef } from "react";
 import FilterCard from "./FilterCard";
 import { addQueryParam } from "@/utils/queryEdit";
 import RangeTypeSelect from "./RangeType";
@@ -28,6 +28,16 @@ export default function NumberFilter({
     filterType: "number",
     parseValue: Number,
   });
+  const inputRefNonRange = useRef<HTMLInputElement>(null);
+  const inputRefRange = useRef<HTMLInputElement>(null);
+
+  // auto select the correct input
+  useEffect(() => {
+    if (editing.isEditing) {
+      const inputRef = rangeType === "range" ? inputRefRange : inputRefNonRange;
+      inputRef.current?.focus();
+    }
+  }, [editing.isEditing, rangeType]);
 
   const onSave = () => {
     if (tempValue.min === null) {
@@ -112,6 +122,7 @@ export default function NumberFilter({
               <div className="range-container">
                 <input
                   className="filter-input num-filter"
+                  ref={inputRefRange}
                   type="number"
                   value={tempValue.min ?? ""}
                   onChange={(e) => onChange(e, "min")}
@@ -127,6 +138,7 @@ export default function NumberFilter({
             ) : (
               <input
                 className="filter-input num-filter"
+                ref={inputRefNonRange}
                 type="number"
                 value={tempValue.min ?? ""}
                 onChange={(e) => onChange(e, "min")}
