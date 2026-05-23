@@ -1,4 +1,4 @@
-# osu! Extra Filters
+# Extra osu! Filters
 
 ![Demo Image 1](/.github/images/screenshot1.png)
 
@@ -33,6 +33,7 @@ Contributions are welcome, if you are interested in working on this, pull reques
 
 ## Potential improvements for the future
 
+- This extension currently only supports English, supporting other languages would be huge.
 - It's somewhat unclear at first glance whether a filter is being edited or is just a saved filter; I think that UI could be improved.
 - There's no proper handling for if the user inputs three of the same filter (eg. stars=5 stars>6 stars<8), there needs to be some way of warning the user. I tried using alerts, but I found that annoying from the user's perspective, so for now it is just a console warning.
 - When refreshing the page, you'll see the tag icon for a split second before it gets changed to the filter icon. I'm not sure how to fix that, but that would be a good fix even if it's a pretty minor thing.
