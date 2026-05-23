@@ -11,8 +11,8 @@ interface Values {
   max: number | null;
 }
 
-// This hook is for any filter that can store a range. This is to reuse some code, but it may be unecessary considering only two
-// components use it but idk.
+// This hook is for any filter that can store a range. This is to reuse some code, but it may have bee overkill considering only
+// two components use it but idk.
 export function useRangeFilter<T>({
   name,
   filterType,

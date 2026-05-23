@@ -24,12 +24,12 @@ Contributions are welcome, if you are interested in working on this, pull reques
 
 1. There are a few filters I did not include in the extension, but I left them out for a reason:
 
-- featured_artist : It's a very niche filter, and it's hard to use without already knowing these identifiers. I figured it wasn't worth bloating the extension with it. If there's demand I can add it.
+- featured_artist : It's a very niche filter, and it's hard to use without already knowing these identifiers (which is an arbitrary number). I figured it wasn't worth bloating the extension with it. If there's demand I can add it.
 - divisor : In my testing I was not able to figure out how to use the filter; it may be defunct. If someone knows how, I could add that in the future.
-- status : This is effectively the same as the normal "Categories" filter already on the page, so I figured there was no point in handling this one.
+- status : This is effectively the same as the normal "Categories" filter already on the page, so this one is redundant.
 
 2. This extension only supports singular filters like </<=/>/>=/=, as well as range values. This realistically covers all use cases for these filters, but just know that the filter cannot handle cases where the user gives a query like "stars>5 stars=3 stars<=7". In the case that the user inputs this (manually, you cannot accidentally do this solely with the extension), the extension will not be able to parse the input, so the filter will be ignored.
-3. The interaction between normal search terms (whatever you put in the search bar that's not a filter) is a little bit awkward, but I think I handled it as gracefully as possible given that the filters are contained within the search bar, not in their own parameters like the normal filters such as genre, language, etc.
+3. The interaction between normal search terms (whatever you put in the search bar that's not a filter) is a little bit awkward, but I think I handled it as gracefully as possible given that the filters are contained within the search bar, not in their own parameters (like the normal filters such as genre, language, etc).
 
 ## Potential improvements for the future
 
