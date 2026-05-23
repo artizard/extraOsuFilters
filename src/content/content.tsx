@@ -1,14 +1,21 @@
 import FilterMenu from "@/components/FilterMenu";
 import { createRoot, Root } from "react-dom/client";
 
+// is menu injected
 let isInjected = false;
+// has tag icon been changed to the filter icon
+let isIconInjected = false;
 let reactRoot: Root | null = null;
 
 const observer = new MutationObserver(() => {
   // if it's the wrong page and we have already injected, then we need to unmount
   // I don't think this will ever actually happen since clicking off of the menu closes
   // it, and it will be cleaned up normally, but I thought I would put this here to be safe.
-  if (!window.location.pathname.startsWith("/beatmapsets")) {
+  console.log(window.location.pathname);
+  if (
+    window.location.pathname !== "/beatmapsets" &&
+    window.location.pathname !== "/beatmapsets/"
+  ) {
     if (isInjected) {
       if (reactRoot) {
         reactRoot.unmount();
@@ -16,6 +23,7 @@ const observer = new MutationObserver(() => {
       }
       isInjected = false;
     }
+    isIconInjected = false;
     return;
   }
 
@@ -23,6 +31,25 @@ const observer = new MutationObserver(() => {
     "div.js-portal:has(.user-tag-picker)",
   );
   const isMenuOpen = portalDiv != null;
+
+  // Optimization to avoid .querySelector every mutation. This injection has to be in the mutationObserver
+  // because if this was at the bottom of the script, it would only inject the icon once; if the user navigates away
+  // and then back, the icon will not be injected again. This optimization could potentially end up desynced, but
+  // I have experienced no issues and this is far more efficient.
+  if (!isIconInjected) {
+    // change tag icon and text to filter
+    const tagButton = document.querySelector(
+      "button.beatmapsets-search__icon",
+    ) as HTMLElement;
+    if (tagButton) {
+      const tagIcon = tagButton.firstElementChild;
+      tagButton.title = "Additional Filters";
+      if (tagIcon) {
+        tagIcon.className = "fas fa-filter";
+        isIconInjected = true;
+      }
+    }
+  }
 
   // inject code into menu
   if (isMenuOpen && !isInjected) {
@@ -55,14 +82,6 @@ const observer = new MutationObserver(() => {
 });
 
 observer.observe(document.documentElement, { childList: true, subtree: true });
-
-// change tag icon and text to filter
-const tagButton = document.querySelector(
-  "button.beatmapsets-search__icon",
-) as HTMLElement;
-const tagIcon = tagButton.firstElementChild;
-tagButton.title = "Additional Filters";
-if (tagIcon) tagIcon.className = "fas fa-filter";
 
 export function sendNewQuery(newQuery: string) {
   const searchInput = document.querySelector(
