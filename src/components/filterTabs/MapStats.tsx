@@ -5,7 +5,7 @@ export default function MapStats() {
   const { getEditProps } = useFilterEditing();
 
   const MAP_STATS_FILTERS = [
-    { name: "length", label: "song length" },
+    { name: "length", label: "song length (s)" },
     { name: "favourites", label: "favorite count" },
     { name: "circles", label: "number of circles" },
     { name: "sliders", label: "sliders" },

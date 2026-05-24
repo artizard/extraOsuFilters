@@ -14,6 +14,7 @@ export default function RangeTypeSelect({
     <div className="range-type-container">
       <button
         className={`range-type-btn ${rangeType === "=" ? "selected-range-type" : ""}`}
+        type="button"
         title="Equal to"
         onMouseDown={(e) => handleSelect(e, "=")}
       >
@@ -21,6 +22,7 @@ export default function RangeTypeSelect({
       </button>
       <button
         className={`range-type-btn ${rangeType === "<" ? "selected-range-type" : ""}`}
+        type="button"
         title="Less than"
         onMouseDown={(e) => handleSelect(e, "<")}
       >
@@ -28,6 +30,7 @@ export default function RangeTypeSelect({
       </button>
       <button
         className={`range-type-btn ${rangeType === ">" ? "selected-range-type" : ""}`}
+        type="button"
         title="Greater than"
         onMouseDown={(e) => handleSelect(e, ">")}
       >
@@ -35,6 +38,7 @@ export default function RangeTypeSelect({
       </button>
       <button
         className={`range-type-btn ${rangeType === "<=" ? "selected-range-type" : ""}`}
+        type="button"
         title="Less than or equal to"
         onMouseDown={(e) => handleSelect(e, "<=")}
       >
@@ -42,6 +46,7 @@ export default function RangeTypeSelect({
       </button>
       <button
         className={`range-type-btn ${rangeType === ">=" ? "selected-range-type" : ""}`}
+        type="button"
         title="Greater than or equal to"
         onMouseDown={(e) => handleSelect(e, ">=")}
       >
@@ -49,6 +54,7 @@ export default function RangeTypeSelect({
       </button>
       <button
         className={`range-type-btn ${rangeType === "range" ? "selected-range-type" : ""}`}
+        type="button"
         title="Range of values (inclusive)"
         onMouseDown={(e) => handleSelect(e, "range")}
       >

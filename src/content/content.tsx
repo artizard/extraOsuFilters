@@ -11,7 +11,6 @@ const observer = new MutationObserver(() => {
   // if it's the wrong page and we have already injected, then we need to unmount
   // I don't think this will ever actually happen since clicking off of the menu closes
   // it, and it will be cleaned up normally, but I thought I would put this here to be safe.
-  console.log(window.location.pathname);
   if (
     window.location.pathname !== "/beatmapsets" &&
     window.location.pathname !== "/beatmapsets/"

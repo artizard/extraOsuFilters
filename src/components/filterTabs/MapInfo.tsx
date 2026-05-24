@@ -8,7 +8,7 @@ export default function MapInfo() {
     { name: "artist", label: "artist name" },
     { name: "title", label: "song title" },
     { name: "source", label: "song source/origin" },
-    { name: "creator", label: "mapper name" },
+    { name: "creator", label: "mapper name (id)" },
     { name: "difficulty", label: "difficulty name" },
   ];
 
