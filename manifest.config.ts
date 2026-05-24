@@ -12,7 +12,6 @@ export default defineManifest({
     48: "public/icon-48.png",
     128: "public/icon-128.png",
   },
-  permissions: ["contentSettings"],
   content_scripts: [
     {
       js: ["src/content/content.tsx"],
