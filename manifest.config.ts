@@ -25,10 +25,7 @@ export default defineManifest((env) => {
         gecko: {
           id: "osu-extra-filters@extension.com",
           strict_min_version: "109.0",
-          data_collection_permissions: {
-            required: [],
-          },
-        },
+        } as any,
       },
     }),
   };
